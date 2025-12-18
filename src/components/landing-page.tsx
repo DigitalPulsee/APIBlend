@@ -37,6 +37,7 @@ import {
 
 export function LandingPage() {
   const router = useRouter()
+  const { user } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
@@ -44,6 +45,18 @@ export function LandingPage() {
   const [passwordStrength, setPasswordStrength] = useState({ strength: 0, text: 'Ingresa una contraseña' })
   const [formErrors, setFormErrors] = useState<Record<string, string>>({})
   const [authMode, setAuthMode] = useState<'register' | 'login'>('register')
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null
+    if (savedTheme) setTheme(savedTheme)
+  }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(newTheme)
+    localStorage.setItem('theme', newTheme)
+  }
 
   useEffect(() => {
     const handleScroll = () => {
