@@ -267,11 +267,17 @@ export function LandingPage() {
                     Precios
                   </button>
                 </li>
-                <li>
-                  <Link href="/ai-assistant" className="block text-purple-400">
-                    Asistente IA
-                  </Link>
-                </li>
+<li>
+                    {user ? (
+                      <Link href="/dashboard" className="block text-purple-400">
+                        Dashboard
+                      </Link>
+                    ) : (
+                      <Link href="/login" className="block text-purple-400">
+                        Iniciar Sesión
+                      </Link>
+                    )}
+                  </li>
               </ul>
             </div>
           )}
