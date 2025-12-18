@@ -227,12 +227,26 @@ export function LandingPage() {
               </li>
             </ul>
 
-            <Link href="/ai-assistant">
-              <Button className="hidden lg:flex bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
-                <Bot className="w-4 h-4 mr-2" />
-                Asistente IA
-              </Button>
-            </Link>
+<div className="hidden lg:flex items-center gap-2">
+                <Button variant="ghost" onClick={toggleTheme} className="text-white hover:bg-white/10">
+                  {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </Button>
+                {user ? (
+                  <Link href="/dashboard">
+                    <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                      <Bot className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/login">
+                    <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Iniciar Sesión
+                    </Button>
+                  </Link>
+                )}
+              </div>
           </nav>
 
           {isMenuOpen && (
