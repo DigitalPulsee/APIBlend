@@ -21,26 +21,30 @@ export default function LoginPage() {
     name: ''
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault()
+      setLoading(true)
+      setError(null)
 
-    try {
-      if (mode === 'register') {
-        await signUp(formData.email, formData.password)
-        setError('¡Cuenta creada! Por favor inicia sesión.')
-        setMode('login')
-      } else {
-        await signIn(formData.email, formData.password)
-        router.push('/dashboard')
+      try {
+        if (mode === 'register') {
+          const result = await signUp(formData.email, formData.password)
+          if ((result as any).needsConfirmation) {
+            setError('¡Cuenta creada! Revisa tu email para confirmar tu cuenta antes de iniciar sesión.')
+          } else {
+            setError('¡Cuenta creada! Ahora puedes iniciar sesión.')
+          }
+          setMode('login')
+        } else {
+          await signIn(formData.email, formData.password)
+          router.push('/dashboard')
+        }
+      } catch (err: any) {
+        setError(err.message || 'Ocurrió un error inesperado')
+      } finally {
+        setLoading(false)
       }
-    } catch (err: any) {
-      setError(err.message || 'Ocurrió un error inesperado')
-    } finally {
-      setLoading(false)
     }
-  }
 
   return (
     <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
