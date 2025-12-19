@@ -13,6 +13,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'GEMINI_API_KEY is not configured' }, { status: 500 })
     }
 
+    // Usando gemini-pro que es más estable en la v1beta si flash falla
     const response = await ai.models.generateContent({
       model: 'gemini-1.5-flash',
       contents: [{
@@ -30,6 +31,20 @@ export async function POST(req: Request) {
     return NextResponse.json({ response: response.text })
   } catch (error: any) {
     console.error('Gemini API Error:', error)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    // Reintento con gemini-pro si flash falla
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-pro',
+        contents: [{
+          role: 'user',
+          parts: [{
+            text: `Usuario pregunta: ${message}`
+          }]
+        }]
+      })
+      return NextResponse.json({ response: response.text })
+    } catch (innerError: any) {
+      return NextResponse.json({ error: innerError.message }, { status: 500 })
+    }
   }
 }
